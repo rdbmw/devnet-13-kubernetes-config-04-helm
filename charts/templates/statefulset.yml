@@ -1,0 +1,26 @@
+---
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: {{ .Values.statefulSets.db.name }}
+  namespace: {{ .Values.namespace }}
+spec:
+  selector:
+    matchLabels:
+      app: {{ .Values.statefulSets.db.name }}
+  serviceName: {{ .Values.statefulSets.db.name | quote }}
+  replicas: {{ .Values.statefulSets.db.replicas }}
+  minReadySeconds: {{ .Values.statefulSets.db.minReadySeconds }}
+  template:
+    metadata:
+      labels:
+        app:  {{ .Values.statefulSets.db.name }}
+    spec:
+      terminationGracePeriodSeconds: {{ .Values.statefulSets.db.terminationGracePeriodSeconds }}
+      containers:
+      - name:  {{ .Values.statefulSets.db.name }}
+        image: {{ .Values.statefulSets.db.image }}
+        ports:
+        - containerPort: {{ .Values.statefulSets.db.containerPort }}
+        env:
+          {{- toYaml .Values.statefulSets.db.env | nindent 10 }}

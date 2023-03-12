@@ -1,0 +1,47 @@
+namespace: prod
+
+deployments:
+  backend:
+    name: backend
+    replicas: 1
+    image: rdbmw/back-app:1.0.0
+    containerPort: 9000
+    env:
+    - name: DATABASE_URL
+      value: postgres://postgres:postgres@db:5432/news
+  frontend:
+    name: frontend
+    replicas: 1
+    image: rdbmw/front-app:1.0.0
+    containerPort: 80
+    env:
+    - name: BASE_URL
+      value: http://backend:9000
+
+statefulSets:
+  db:
+    name: db
+    replicas: 1
+    image: postgres:13-alpine
+    containerPort: 5432
+    minReadySeconds: 10
+    terminationGracePeriodSeconds: 10
+    env:
+      - name: POSTGRES_PASSWORD
+        value: postgres
+      - name: POSTGRES_USER
+        value: postgres
+      - name: POSTGRES_DB
+        value: news
+
+services:
+  db:
+    name: db
+    type: ClusterIP
+    port: 5432
+    targetPort: 5432
+  backend:
+    name: backend
+    type: ClusterIP
+    port: 9000
+    targetPort: 9000

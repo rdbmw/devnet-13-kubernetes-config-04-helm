@@ -1,0 +1,25 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Values.deployments.frontend.name }}
+  namespace: {{ .Values.namespace }}
+  labels:
+    app: {{ .Values.deployments.frontend.name }}
+spec:
+  replicas: {{ .Values.deployments.frontend.replicas }}
+  selector:
+    matchLabels:
+      app: {{ .Values.deployments.frontend.name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Values.deployments.frontend.name }}
+    spec:
+      containers:
+      - name: {{ .Values.deployments.frontend.name }}
+        image:  {{ .Values.deployments.frontend.image }}
+        ports:
+        - containerPort: {{ .Values.deployments.frontend.containerPort }}
+        env:
+          {{- toYaml .Values.deployments.frontend.env | nindent 10 }}

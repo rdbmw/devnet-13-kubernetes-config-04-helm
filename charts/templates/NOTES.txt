@@ -1,0 +1,7 @@
+---------------------------------------------------------
+
+Front-back app example.
+Deployed app version {{ .Chart.AppVersion }}.
+Chart version {{ .Chart.Version }}.
+
+---------------------------------------------------------
